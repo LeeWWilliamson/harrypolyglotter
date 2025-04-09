@@ -1,16 +1,17 @@
-body {
-  font-family: sans-serif;
-  background: #6e76ad;
-  padding: 20px;
-  margin: 0;
-}
-
 nav {
   background: #333;
+  padding: 10px;
 }
 
 nav a {
   color: white;
   text-decoration: none;
   margin-right: 15px;
+  padding: 10px;
+  display: inline-block;
+}
+
+nav a:hover {
+  background-color: #575757;  /* Darken the background on hover */
+  border-radius: 5px;         /* Optional: Add rounded corners */
 }
