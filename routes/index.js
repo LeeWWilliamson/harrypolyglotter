@@ -16,7 +16,14 @@ router.get('/about', (req, res) => {
 
 // Contact route (GET)
 router.get('/contact', (req, res) => {
-  res.render('contact', { title: 'Contact Us', confirmation: false });
+  res.render('contact', {
+    title: 'Contact Us',
+    confirmation: false,
+    errors: [], // Pass empty array for errors on initial load
+    name: '',
+    email: '',
+    message: ''
+  });
 });
 
 
@@ -24,11 +31,43 @@ router.get('/contact', (req, res) => {
 router.post('/contact', (req, res) => {
   const { name, email, message } = req.body;
 
-  // You can process the form data here (e.g., save to database, send email, etc.)
+  // Server-side validation
+  let errors = [];
+
+  // Check if all fields are filled out
+  if (!name || !email || !message) {
+    errors.push('All fields are required.');
+  }
+
+  // Check if email is valid
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  if (!emailRegex.test(email)) {
+    errors.push('Please enter a valid email address.');
+  }
+
+  // If there are errors, render the form again with error messages
+  if (errors.length > 0) {
+    return res.render('contact', {
+      title: 'Contact Us',
+      errors: errors, // Pass errors to the template
+      name: name,
+      email: email,
+      message: message
+    });
+  }
+
+  // If validation passes, you can process the data here (e.g., save to a database, send email)
   console.log('Form submitted:', { name, email, message });
 
   // Send a simple confirmation message
-  res.render('contact', { title: 'Contact Us', confirmation: true });
+  res.render('contact', {
+    title: 'Contact Us',
+    confirmation: true,
+    errors: [], // Clear errors after successful submission
+    name: '',
+    email: '',
+    message: ''
+  });
 });
 
 module.exports = router;
