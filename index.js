@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
+const indexRoutes = require('./routes/index');
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
 
-const PORT = 3000;
+app.use('/', indexRoutes);
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
