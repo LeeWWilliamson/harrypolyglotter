@@ -9,6 +9,28 @@
   <%- include('partials/navbar') %>
 
   <h1>Welcome to Harry Polyglotter!</h1>
-
+  
+  <h1>Harry Potter Characters</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>House</th>
+        <th>Species</th>
+        <th>Patronus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% characters.forEach(function(character) { %>
+        <tr>
+          <td><%= character.name %></td>
+          <td><%= character.house %></td>
+          <td><%= character.species %></td>
+          <td><%= character.patronus %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  
 </body>
 </html>

@@ -1,8 +1,22 @@
 require('dotenv').config(); // Load environment variables from .env file
 
 const express = require('express');
+const axios = require('axios');
+const app = express();
 const router = express.Router();
 const nodemailer = require('nodemailer');
+
+// Route to render the homepage
+router.get('/', async (req, res) => {
+  try {
+    const response = await axios.get('https://potterapi-fedeperin.vercel.app/en/characters');
+    console.log(response.data); // 🧙 You should see the character array in your terminal
+    res.render('index', { title: 'Home | Harry Polyglotter', characters: response.data });
+  } catch (error) {
+    console.error('Failed to fetch character data:', error.message);
+    res.render('index', { title: 'Home | Harry Polyglotter', characters: [] });
+  }
+});
 
 // Setup the email transporter using environment variables
 const transporter = nodemailer.createTransport({
