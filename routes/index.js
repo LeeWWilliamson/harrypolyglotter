@@ -1,5 +1,17 @@
+require('dotenv').config(); // Load environment variables from .env file
+
 const express = require('express');
 const router = express.Router();
+const nodemailer = require('nodemailer');
+
+// Setup the email transporter using environment variables
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,  // Access the EMAIL_USER environment variable
+    pass: process.env.EMAIL_PASS   // Access the EMAIL_PASS environment variable
+  }
+});
 
 // Body parser middleware to parse POST request data
 router.use(express.urlencoded({ extended: true }));
@@ -56,17 +68,37 @@ router.post('/contact', (req, res) => {
     });
   }
 
-  // If validation passes, you can process the data here (e.g., save to a database, send email)
-  console.log('Form submitted:', { name, email, message });
+  // If validation passes, send the email using Nodemailer
+  const mailOptions = {
+    from: email,  // Sender's email address (user's email)
+    to: 'leewwilliamson@gmail.com',  // Replace with your email address
+    subject: 'New Contact Form Submission',
+    text: `You have a new message from your website contact form.\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`
+  };
 
-  // Send a simple confirmation message
-  res.render('contact', {
-    title: 'Contact Us',
-    confirmation: true,
-    errors: [], // Clear errors after successful submission
-    name: '',
-    email: '',
-    message: ''
+  // Send the email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      return res.render('contact', {
+        title: 'Contact Us',
+        confirmation: false,
+        errors: ['Failed to send email. Please try again later.'],
+        name: name,
+        email: email,
+        message: message
+      });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.render('contact', {
+        title: 'Contact Us',
+        confirmation: true,
+        errors: [], // Clear errors after successful submission
+        name: '',
+        email: '',
+        message: ''
+      });
+    }
   });
 });
 
