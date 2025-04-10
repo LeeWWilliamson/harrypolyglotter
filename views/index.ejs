@@ -11,26 +11,57 @@
   <h1>Welcome to Harry Polyglotter!</h1>
   
   <h1>Harry Potter Characters</h1>
+  <form method="get" action="/">
+    <label for="lang">Add a language:</label>
+    <select name="lang" id="lang">
+      <option value="">-- Select a language --</option>
+      <option value="es">Spanish</option>
+      <option value="fr">French</option>
+      <option value="it">Italian</option>
+      <option value="pt">Portuguese</option>
+      <option value="uk">Ukrainian</option>
+    </select>
+    <button type="submit">Add</button>
+  </form>
+  
   <table border="1">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>House</th>
-        <th>Species</th>
-        <th>Patronus</th>
+        <th>Full Name (EN)</th>
+        <% if (selectedLang) { %>
+          <th>Full Name (<%= selectedLang.toUpperCase() %>)</th>
+        <% } %>
+        <th>House (EN)</th>
+        <% if (selectedLang) { %>
+          <th>House (<%= selectedLang.toUpperCase() %>)</th>
+        <% } %>
+        <th>Birthdate</th>
+        <th>Image</th>
       </tr>
     </thead>
     <tbody>
-      <% characters.forEach(function(character) { %>
+      <% characters.forEach(function(character, index) { %>
         <tr>
-          <td><%= character.name %></td>
-          <td><%= character.house %></td>
-          <td><%= character.species %></td>
-          <td><%= character.patronus %></td>
+          <td class="wrap-column"><%= character.fullName %></td>
+          <% if (selectedLang) { %>
+            <td class="wrap-column"><%= character.translatedFullName %></td>
+          <% } %>
+          <td><%= character.hogwartsHouse %></td>
+          <% if (selectedLang) { %>
+            <td><%= character.translatedHouse %></td>
+          <% } %>
+          <td><%= character.birthdate %></td>
+          <td class="image-column">
+            <% if (character.image) { %>
+              <img src="<%= character.image %>" alt="Image of <%= character.fullName %>" width="60">
+            <% } else { %>
+              N/A
+            <% } %>
+          </td>
         </tr>
       <% }) %>
     </tbody>
   </table>
-  
+      
 </body>
 </html>

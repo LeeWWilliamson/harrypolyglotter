@@ -15,3 +15,61 @@ nav a:hover {
   background-color: #575757;  /* Darken the background on hover */
   border-radius: 5px;         /* Optional: Add rounded corners */
 }
+
+/* Make the table layout auto so columns can shrink to fit */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* Important for auto-sizing columns */
+}
+
+/* Style table headers and cells */
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  vertical-align: top;
+  text-align: left;
+}
+
+th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Full name column to wrap text */
+.wrap-column {
+  max-width: 200px; /* Set a maximum width for the column */
+  word-wrap: break-word;
+  white-space: normal; /* Ensure wrapping occurs */
+  overflow: hidden;
+}
+
+/* Image column */
+.image-column {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Image column styling */
+.image-column {
+  width: 80px; /* Lock the column width */
+  padding: 4px;
+  text-align: center;
+}
+
+.image-column img {
+  max-width: 60px; /* Size the image */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+
+
+
+
+

@@ -9,12 +9,37 @@ const nodemailer = require('nodemailer');
 // Route to render the homepage
 router.get('/', async (req, res) => {
   try {
-    const response = await axios.get('https://potterapi-fedeperin.vercel.app/en/characters');
-    console.log(response.data); // 🧙 You should see the character array in your terminal
-    res.render('index', { title: 'Home | Harry Polyglotter', characters: response.data });
+    const selectedLang = req.query.lang; // e.g., 'es', 'fr', etc.
+
+    // Fetch English characters
+    const enResponse = await axios.get('https://potterapi-fedeperin.vercel.app/en/characters');
+    const enCharacters = enResponse.data;
+
+    let translatedCharacters = [];
+
+    if (selectedLang) {
+      const langResponse = await axios.get(`https://potterapi-fedeperin.vercel.app/${selectedLang}/characters`);
+      const langCharacters = langResponse.data;
+
+      // Merge characters by their index
+      translatedCharacters = enCharacters.map((char) => {
+        const translatedChar = langCharacters.find((c) => c.index === char.index);
+        return {
+          ...char,
+          translatedFullName: translatedChar?.fullName || '',
+          translatedHouse: translatedChar?.hogwartsHouse || ''
+        };
+      });
+    }
+
+    res.render('index', {
+      title: 'Harry Polyglotter',
+      characters: selectedLang ? translatedCharacters : enCharacters,
+      selectedLang
+    });
   } catch (error) {
-    console.error('Failed to fetch character data:', error.message);
-    res.render('index', { title: 'Home | Harry Polyglotter', characters: [] });
+    console.error('Error fetching data:', error.message);
+    res.status(500).send('Something went wrong.');
   }
 });
 
